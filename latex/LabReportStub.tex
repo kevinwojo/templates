@@ -1,0 +1,680 @@
+\documentclass[10pt,letterpaper,titlepage]{article}
+
+%%report style
+\usepackage[margin=0.75in]{geometry}
+\usepackage{float}
+\floatstyle{boxed}
+\restylefloat{figure}
+
+%special characters
+\usepackage{textcomp}
+
+% code listings
+\usepackage{fancyvrb}
+
+%color 
+\usepackage{color}
+
+%%header and footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{Student Project - Behaviorial Driven Testing}
+\rhead{\thepage}
+\cfoot{Student - 9/28/2015 }
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%%source code formatting
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\usepackage{listings}
+\lstset{frame=tb,
+  language=Bash,
+		aboveskip=3mm,
+		belowskip=3mm,
+		showstringspaces=false,
+		columns=flexible,
+		basicstyle={\small\ttfamily},
+		numbers=none,
+		numberstyle=\tiny\color{gray},
+		keywordstyle=\color{blue},
+		commentstyle=\color{dkgreen},
+		stringstyle=\color{mauve},
+		breaklines=true,
+		breakatwhitespace=true,
+		tabsize=3
+		}
+\usepackage{verbatim}
+
+%%hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+colorlinks = true,
+citecolor = gray,
+linkcolor = blue,
+}
+\urlstyle{rm} % roman font
+
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+%\usepackage[backref=true,backend=biber,natbib=true,hyperref=true]{biblatex}
+%\bibliography{refs}
+
+%%graphics
+\usepackage{graphicx}
+\graphicspath{ {images/} } %images in /images
+
+%%for specific fonts
+\usepackage{fontspec}
+
+%% multi-columns
+\usepackage{multicol}
+
+\usepackage{amsfonts}
+\usepackage{booktabs}
+%\usepackage{siunitx}
+
+%table environment
+%\usepackage{tabulary}
+
+%Keep Floats where they belong
+%\usepackage{placeins}
+
+%\usepackage{perpage} %the perpage package
+%\MakePerPage{footnote} %the perpage package command
+%float package
+\usepackage{float}
+
+\begin{document}
+\setmainfont{Times New Roman}
+
+\begin{titlepage}
+\begin{center}
+%%%%%%% Title Page %%%%%%%%%%%
+
+~\\[4.25cm]
+
+{ \huge HubZERO Student Project \\[0.25cm] }
+
+\textsc{\large Behaviorial Driven Testing}\\[0.25cm]
+\textsc{\large Fall 2015}\\[0.5cm]
+
+~ \\[1.5cm]
+\begin{tabular}{ |l|l|l| }
+\hline
+\multicolumn{3}{|c|}{Check-in Dates} \\
+\hline
+\textbf{Date} & \textbf{Milestone} & \textbf{Check-off} \\
+\hline
+Thurs. Oct 8 & Module 1 - Setting up Dev Environment & \\
+\hline
+Thurs. Oct 15 & Module 2 - Testing \texttt{com\_feedback} &   \\ 
+\hline
+Thurs. Nov 5 & Module 3 - Automating Tests& \\ 
+\hline
+\end{tabular}
+\vfill
+\end{center}
+\end{titlepage}
+
+%%%%%%% END TITLE PAGE %%%%%%%%%%%%%%%
+
+\newpage
+\thispagestyle{empty}
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+%\thispagestyle{empty}
+			
+\newpage
+\section{Module 1 - Setting up the Development Environment}
+In this module you will: 
+\begin{itemize}
+\item Develop a general understanding of a LAMP server.
+\item Establish a working development environment.
+\item Become familiar with the HubZERO codebase. 
+\end{itemize}
+
+\subsection{Deliverables}
+You will be evaluated on progress based on the following deliverables: 
+\begin{enumerate}
+\item Show that you can login to your development environment via SSH.
+\item Demonstrate logging in as a CMS user on the web interface.
+\item Describe what the \texttt{PATH\_ROOT} constant returns.
+\item When editing code, are tabs or spaces used for code indentation within the HubZERO CMS codebase?
+\item Describe how to make a change and submit it using git.
+\item Section \ref{commitchangesgit}: Give a better example a description originally written in \ref{gitlog2} with the changes given in \ref{badcommit}.
+\item Where can you find initial default \emph{secret} passwords?
+\end{enumerate}
+
+\subsection{Project Structure and Evaluation of Project Progress}
+This research project will be divided into three modules where progress on each module will be evaluated and disucssed every two weeks in order to adjust requirements and determine feasibility in the implementation of the end-result of this project. 
+
+The first module will be concerned with establishing a stable and working development environment where code contributions may take place.  The second module will be be focused on writing behaviorial driven tests using a simple component within the HubZERO content management system.  The third module will investigate implementing automated tests inline with the contribution process. This project will have some deliverables usually formatted as demonstrations, conversations, and presentation out to the HubZERO development team. The expectation will be that a working prototype will be developed with some guidance from the HubZERO web development team. 
+
+It will be required to attend all three check-ins. If a scheduling conflict occurs, it will be your responsibility to reschedule a check-in meeting within a week from the posted date. If you feel that you will not produced the deliverables for each module by the check-in date, a conversation either in-person or email will occur providing evidence that some progress has been made and explaination of \emph{any} difficulties experienced.
+If you have need assistance and further guidance, please do not hesistate to email me <kevinw@purdue.edu> or stop in my office (YONG 1005).  This project is designed to be challenging, yet attainable. If you need assistance in this project, please do not hesistate to ask. 
+
+
+\subsection{Preliminary Information}
+Web developement is different than any other development. Often times computer scientists complain that it is 'hacky' or cumbersome to work with because it may require three different languages
+to achieve an elegantly styled, functionally sound, and useful web application. Due to this, people who develop in other languages tend to shy away from web development. In order to reduce the learning curve
+associated with web development, this section gives a brief overview of some of the technologies used to work on the web-based content management system {CMS} of the HubZERO project.
+
+\subsubsection{LAMP server}
+A LAMP server refers to a commonly-used collection of software to power web applications. The bundle of Linux, Apache, MySQL, and PHP is frequently used throughout web applications, especially open source projects
+as there is a huge community to support development efforts. It's so common, that many mainstream Linux distributions are shipping with a LAMP meta package that provides an out-of-the box web application server
+preconfigured for a large set of use-cases. 
+
+The following readings are part of this project's module in order to ensure understanding the environment you will be writing code under.
+
+\begin{enumerate}
+\item \url{http://www.serverwatch.com/tutorials/article.php/3567741/Understanding-LAMP.htm}
+\item \url{https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-on-debian-8}
+\end{enumerate}
+
+\subsubsection{PHP}
+PHP is the scripting language which provides the server-side processing environment for the Hubzero CMS. A few resources to keep handy when developing PHP code are:
+\begin{enumerate}
+\item \url{https://secure.php.net/manual/en/index.php}
+\item \url{http://www.w3schools.com/php/}
+\end{enumerate}
+
+\subsubsection{MySQL}
+MySQL is the database software used in many web applications - including the HubZERO CMS. It is a relational database using the structured query language as an interface to the database functions.
+The CMS provides PHP libraries for interacting with the MySQL database, but it may become necessary to write a custom query or to debug the library-generated query strings. Helpful resources for MySQL are:
+
+\begin{enumerate}
+\item \url{http://www.w3schools.com/sql/default.asp}
+\item \url{http://dev.mysql.com/doc/}
+\end{enumerate}
+
+\subsubsection{Javascript}
+Javascript is a client-side scripting language. This means that Javascript is run in the \emph{client's or user's} browser and due to this has a number of limitations. One example of a limitation is that Javascript is not allowed
+to read files on a user's filesystem directly. It may make calls to the browser to place a cookie, interact with browser storage mechanisms, create a system dialog (pop-up prompt), or interact with the document object model (DOM). 
+There are different flavors of Javascript. The ones most likely encountered within HubZERO are JQuery, regular ol' Javascript, and Node JS - an asychronous javascript framework. Some references for the javascripting are:
+
+\begin{enumerate}
+\item \url{http://www.w3schools.com/js/default.asp}
+\item \url{http://api.jquery.com/}
+\item \url{https://nodejs.org/en/docs/}
+\end{enumerate}
+
+\subsubsection{HubZERO CMS}
+The HubZERO Content Management System is a web application based off the Joomla! content managment system. In the more recent versions of the HubZERO implentations, an on-going effort to remove Joomla dependancies and moving
+to a more flexible framework has been started. As of HubZERO 2.0.0, the structure of the web root has changed to allow for a segregation of the Joomla code and the HubZERO code. Some of the changes are documented
+here at \url{https://hubzero.org/blog/2015/12/what-to-do-with-hubzero-20}, \url{https://hubzero.org/documentation/2.0.0/webdevs/index.upgrade} and \url{https://hubzero.org/documentation/2.0.0/releasenotes}. 
+
+The official guide for HubZERO development is \url{https://hubzero.org/documentation/2.0/webdevs}. This documentation contains the style guide and coding conventions which \emph{MUST} be adhered to when contributing code
+to the HubZERO project.
+
+The PHP Linter will automatically reject patches that do not adhere to the style guide. 
+
+It is useful to have the HubZERO documentation available when contributing code.
+
+
+\subsection{Setting Up the VM}
+This section will guide you through setting up your development environment for login access and installation of a working development copy of the HubZERO CMS.
+\textit{(*) Denotes copied from VM Images Quickstart Guide}
+\subsubsection{Obtaining the IP address (*)}
+The following procedure describes how to obtain your VM's IP address (should not apply to Amazon Web Service Instances).
+\begin{enumerate}
+\item Start the HUBzero virtual machine and log into it using the name "root" and the password "hubzero2015". You will find various passwords for the site in /etc/hubzero.secrets. (NOTE: Changing the data in this file will not alter the real passwords.)
+\item Run the command "ifconfig eth0". The second line should report something like "inet addr:192.168.111.128" -- record that number. It is the IP address given to the HUBzero virtual machine by the VMware software.
+\item Run the command "nano /etc/hosts" to edit the /etc/hosts file. Replace the IP number for example.com with the IP number recorded in the previous step. Save the changes in the nano editor by pressing Ctrl-O, and then exit by pressing Ctr-X.
+\item Run the command "reboot". Log back into the VM and double check the IP.
+\item Start your web browser and point it at "http://XXX.XXX.XXX.XXX" using the IP number you recorded above in place of the XXX.XXX.XXX.XXX part.
+\item Congratulations! Your new hub is up and running!
+\end{enumerate}
+
+\subsubsection{Register as a User(*)}
+\begin{enumerate}
+\item On the home page of your hub (http://XXX.XXX.XXX.XXX), press the "Register" button in the upper-right corner. Fill in the information required and press the "Create Account" button.
+\item Normally, an email would be sent to you to confirm your registration, but since this VM is local-only, the confirmation must be done by the administrator. Do this by pointing your web browser at "http://XXX.XXX.XXX.XXX/administrator/" (again replacing XXX... with your IP address). Log in by entering "admin" for the username and "4bAussvaj4" for the password.
+\item Pull down the "Users" menu and select the "Members" menu item. Find the new user and click on it. Scroll down the page and find the "Details" box and press the "Confirm" button in the "Email" section. Then, press the large "Save" button in the upper-right part of the page. Then, click the small "logout" text in the upper-right part of the page.
+\end{enumerate}
+
+\subsubsection{Using Your New Hub(*)}
+You have now created and enabled a new user for your hub. Follow the steps below to launch a tool as that user:
+\begin{enumerate}
+\item Point the web browser back at the hub's home page (http://XXX.XXX.XXX.XXX) and click on "Login". Enter the same username and password that you registered. This will bring up your dashboard page.
+\item Run the workspace tool: Under "My Tools", select the "All Tools" tab and look for the "Workspace" entry. Click on the icon to the right of "Workspace" to launch the tool. Or instead, click directly on the "Workspace" link to visit the workspace tool page, then press the "Launch Tool" button on that page.
+\item As the tool page comes up, you may see a security warning. This is normal since this test machine does not have a security certificate installed, and we're accessing the site directly via its IP address. In this case, it is safe to continue.
+\item You should see the workspace come up with a "Color xterm" window on it. Click on the window and type some commands. Your new user account now has a space to develop tools for your hub. To see how, check out the Guide for Tool Developers
+\item You can customize and configure your hub through the administrative web interface at http://XXX.XXX.XXX.XXX/administrator/. To see how, check out the Guide for Hub Managers. If you need to access the underlying system directly, use sftp to transfer files and ssh to log into the web server machine. These commands are included on Linux and MacOSX systems. If you're running on a Windows machine, use the psftp.exe and putty.exe programs in the "utilities" directory instead.
+\end{enumerate}
+
+\subsubsection{SSH key generation}
+Secure SHell (SSH) is used to login to your development environment so you may edit code, manipulate the filesystem, and create patches (see Section \ref{usinggit}).
+To use the keypair on your workstation to login into your development environment, following this procedure should allow you to login without a password by supplying your workstation's keypair.
+\url{http://www.linuxproblem.org/art_9.html} Once you have your virtual machine and user account created, you will want to generate a SSH keypair on the virtual machine in addition to the keypair residing on your workstation.  The keypair on your virtual machine will allow you to gain access to the HubZERO core repository. 
+
+For instructions on how to generate an SSH keypair:
+\url{https://hubzero.org/groups/hubdev/wiki/GeneratingaKeyPair}
+
+\subsubsection{Error Logs}
+\label{errorlogging}
+The software used by the CMS has log files which are usually located in \texttt{/var/log/}. You may want to check \texttt{/var/log/mysql}, \texttt{/var/log/apache}, \texttt{/var/log/php} for applicable
+error logs.
+
+\subsection{Using git}
+\label{usinggit}
+Git is the versioning system used within the HubZERO project. It allows for decentralized development and is a powerful tool used for tracking changes throughout the codebase. In it's current form, each version is a branch and new development occurs on the master branch. Due to this, it is necessary to checkout the previous version branch and make a seperate commit to backport bug fixes. This section will give a brief overview of some of the most commonly-used git commands.
+
+\subsubsection{Cloning the Repository}
+When starting to work on a project, the first action is to obtain an exact copy of the code that the developer wishes to work on. To do this, the developer uses \texttt{git clone} to copy the code over. This section will continue assuming you are working with a HubZERO development virtual machine or Amazon Web Instance.
+
+When cloning the Hubzero CMS, it may prove useful to keep the original directory in order to preserve the \texttt{configuration.php} file. 
+
+On the HUBzero Development Virtual Machine:
+\begin{enumerate}
+
+\item Rename the exisiting web root directory and call it \texttt{<name.orig>}.
+\item Run the git clone command as shown in Listing \ref{gitclonehz}.
+\begin{lstlisting}[label=gitclonehz,caption={Incantation for cloning the hubzero-cms repository.}]
+git clone gitolite@hubzero.org:hubzero-cms <name>
+\end{lstlisting}
+\item You now have the latest code in the hubzero-cms repository installed in your web root.
+\item Navigate to your dev VM's IP address or Hostname in your browser. Are any errors displayed? See Section \ref{errorlogging} for logging information.
+\item If \texttt{/app/config/} is populated in the \emph{original} directory, copy the \texttt{/app/} directory over to the \emph{newly cloned} directory.
+\end{enumerate}
+
+\subsubsection{Synchronizing the Working Tree}
+After making changes to a particular file, it may become necessary to synchronize other changes in the tree with your local copy of the working tree. In order
+to accomplish this we use the \texttt{git pull} command as shown in Listing \ref{gitpull}. 
+
+\begin{lstlisting}[caption={Using git to pull in recent changes to your working tree.},label=gitpull,language=Bash]
+git pull --rebase 
+\end{lstlisting}
+
+We specify the \texttt{--rebase} flag in order to keep the tree flat. This means that the file history is rewritten each time you do this operation. The development team currently does this in order to facilitate deploying the
+software to supported Hubs easier and more elegantly.
+
+\subsubsection{Committing Changes}
+\label{commitchangesgit}
+After you have made your changes to your files you will need to package those changes and push them to the core repository. It is good practice to package those changes whenever functionality changes.
+Instead of making \emph{all} changes and packaging it into a large package, break them into bite-sized pieces which would make it easier to 'step-back' incrementally if you just need to change one part.
+For instance, if you create a new component, have one commit for each file you create. If you change three methods in a class, create a commit for each method change.
+
+To place files in the package, known as staging the file for commit, you will want to run the \texttt{git add} command as show in Listing \ref{gitadd}.
+
+\begin{lstlisting}[caption={Adding files to a commit.},language=Bash,label=gitadd]
+git add <filename> <filename_2> ... <filename_n>
+\end{lstlisting}
+
+Once you have added all the files you want for that particular commit, you will need to form the commit itself. The HubZERO development team has a standard format for commit messages in order to help organize
+and quickly identify changes to the codebase. Listing \ref{gitcommit} has the formula for creating a commit message.
+
+\begin{lstlisting}[caption={Style for commit messages used in HubZERO web development.},language=Bash,label=gitcommit]
+git commit -m “[HUBNAME][TICKET #][TPL/MOD/COM/PLG/_<name>] Description of change”]
+\end{lstlisting}
+
+The format of the message requires a Hub's name, ticket number, and affected template (TPL), module (MOD), component (COM), or plugin (PLG) name followed by a brief description of the change.
+A few real-world examples are listed in Listing \ref{gitlog1} and \ref{gitlog2}.
+
+\begin{lstlisting}[caption={An exammple of a git commit message following the standard format.},language=Bash,label=gitlog1]
+[HUBZERO][#8732][COM_MEMBERS] Adjusting ORCID search to allow use of public search without auth token
+\end{lstlisting}
+
+In Listing \ref{gitlog1} it is clear that this commit was a result of a ticket (\#8732) on Hubzero.org, affecting the members component. The fix was an adjustment to ORCID search to allow
+public to search without using an authentication token. This commit is easily-readable and traceable. Let's take at Listing \ref{gitlog2} to see if we can identify the same changes.
+
+\begin{lstlisting}[caption={Style for commit messages used in HubZERO web development.},language=Bash,label=gitlog2]
+added multiple amazon flavors
+\end{lstlisting}
+
+This commit message is difficult to decipher. Without using a tool such as \texttt{tig} or \texttt{git log} it is impossible to know exactly what changes were made. Avoid using vague descriptions in order to
+help your fellow teammates to figure out what changes have been made without additional effort. Listing \ref{badcommit} shows exactly what file changes were made. \textbf{How would you write this commit message to be more descriptive?}
+
+
+\begin{lstlisting}[caption={Style for commit messages used in HubZERO web development.},language=Bash,label=badcommit]
+diff --git a/core/libraries/Hubzero/Console/Command/Repository/Flavor.php b/core/libraries/Hubzero/Console/Command/Repository/Flavor.php
+index 1421453..87dc4ec 100644
+--- a/core/libraries/Hubzero/Console/Command/Repository/Flavor.php
++++ b/core/libraries/Hubzero/Console/Command/Repository/Flavor.php
+@@ -38,6 +38,9 @@ use Hubzero\Console\Output;
+ use Hubzero\Console\Arguments;
+ use Hubzero\Content\Migration\Base as Migration;
+ 
++// Check to ensure this file is included in Joomla!
++defined('_JEXEC') or die('Restricted access');
++
+ /**
+  * Repository flavor class
+  **/
+@@ -46,7 +49,7 @@ class Flavor extends Base implements CommandInterface
+        /**
+         * Default (required) command
+         *
+-        * @return  void
++        * @return void
+         **/
+        public function execute()
+        {
+@@ -56,7 +59,7 @@ class Flavor extends Base implements CommandInterface
+        /**
+         * Set the flavor
+         *
+-        * @return  void
++        * @return void
+         **/
+        public function set()
+        {
+@@ -65,12 +68,74 @@ class Flavor extends Base implements CommandInterface
+                        $this->output->error('Please provide the flavor you would like to use');
+                }
+ 
+-               $database  = App::get('db');
++               $database = App::get('db');
+                $migration = new Migration($database);
+ 
+                switch ($flavor)
+                {
+-                       case 'amazon':
++                       case 'amazonfull':
++
++                               $defaults = array(
++                                       '{"module":44,"col":1,"row":1,"size_x":1,"size_y":2}',
++                                       '{"module":35,"col":1,"row":3,"size_x":1,"size_y":2}',
++                                       '{"module":38,"col":1,"row":5,"size_x":1,"size_y":2}',
++                                       '{"module":39,"col":1,"row":7,"size_x":1,"size_y":2}',
++                                       '{"module":33,"col":2,"row":1,"size_x":1,"size_y":2}',
++                                       '{"module":42,"col":2,"row":3,"size_x":1,"size_y":2}',
++                                       '{"module":34,"col":2,"row":5,"size_x":1,"size_y":2}',
++                                       '{"module":37,"col":3,"row":1,"size_x":1,"size_y":2}'
++                               );
++
++                               $params = array(
++                                       "allow_customization" => "1",
++                                       "position"            => "memberDashboard",
++                                       "defaults"            => '[' . implode(',', $defaults) . ']'
++                               );
++
++                               $migration->savePluginParams('members', 'dashboard', $params);
++                               $this->output->addLine('Updating default members dashboard configuration');
++
++                               // Set amazon param in welcome template
++                               $params = array('flavor' => 'amazon', 'template' => 'hubbasic2013');
++                               $query  = "UPDATE `#__template_styles` SET `params` = " . $database->quote(json_encode($params)) . " WHERE `template` = 'welcome'";
++                               $database->setQuery($query);
++                               $database->query();
++                               $this->output->addLine('Setting amazon flavor flag in welcome template');
++
++                               // Set amazon template as home
++                               $this->output->addLine('Setting amazon template for welcome page');
++                               $query  = "UPDATE `#__template_styles` SET `home` = 1 where `template` = 'welcome' and `client_id` = 0";
++                               $database->setQuery($query);
++                               $database->query();
++                               $query  = "UPDATE `#__template_styles` SET `home` = 0 where `template` != 'welcome' and `client_id` = 0";
++                               $database->setQuery($query);
++                               $database->query();
++
++                               // Update default content page(s)
++                               //$this->output->addLine('Updating default content pages');
++                               //$this->output->addLine('Updating content page id (22)');
++                               //$query  = "UPDATE `#__content` SET `introtext` = '{xhub:include type=\"stylesheet\" filename=\"pages/discover.css\"}\r\n<div class=\"grid\">\r\n    <div class=\"col span-quarter\">\r\n        <h2>Do Mo
++                               $//query .= " WHERE `id` = '22' AND `alias` = 'discover'";
++                               //$database->setQuery($query);
++                               //$database->query();
++
++                               //$this->output->addLine('Updating content page id (32)');
++                               //$query  = "UPDATE `#__content` SET `introtext` = '{xhub:include type=\"stylesheet\" filename=\"pages/gettingstarted.css\"}\r\n\r\n<div class=\"explore-section\">\r\n <div class=\"wrap\">\r\n        
++                               //$query .= " WHERE `id` = '32' AND `alias` = 'gettingstarted'";
++                               //$database->setQuery($query);
++                               //$database->query();
++
++                               // disable components
++                               $this->output->addLine('Disabling com_usage');
++                               $migration->disableComponent('com_usage');
++
++                               $this->output->addLine('Disabling com_store');
++                               $migration->disableComponent('com_store');
++
++
++                               break;
++
++                       case 'amazoncmsonly':
+                                // Disable com_tools
+                                $migration->disableComponent('com_tools');
+                                $this->output->addLine('Disabling com_tools');
+\end{lstlisting}
+
+\subsubsection{Submitting Changes}
+So now that you have all of your changes all wrapped up in neat little commits, it's time to share those changes with the rest of the team.
+This is easily done by running the \texttt{git push} command. There! That wasn't so hard was it?
+
+%TODO cherry-picking
+%TODO stashing
+%TODO getting rejected by the LINTER 
+
+\subsubsection{More on Git}
+The Git Book is available freely on the Internet. It covers Git in great detail and provides some helpful tips to using it. It is a recommended read.
+\url{https://git-scm.com/book/en/v2}
+
+\subsection{Muse}
+\label{musereference}
+Muse is a command-line utility designed to facilitate administrative and development tasks concerning the HubZERO CMS. Muse is capable of doing many functions, but we will focus on 
+the primary task - migrations.
+
+\subsubsection{Migrations}
+A migration is a way to keep changes in the database synchronized. A migration consists of an \texttt{up()} method and a \texttt{down} method. The up \texttt{up()} method
+is the default direction of the migration - meaning changes that you wish to make are placed here such as adding a column or inserting a row. The \texttt{down()} method should 
+contain the exact opposite action of the \texttt{up()} method. This method is designed to act as the 'undo' in case a mistake was made and the database needs to be reverted to a known state. Listing
+\ref{migrationexample} shows a real-work example of what a good migration looks like.
+
+\begin{lstlisting}[caption={\texttt{Migration20131108091700ComBlog.php} - an example of a properly formed Migration},language=PHP,label=migrationexample]
+<?php
+
+use Hubzero\Content\Migration\Base;
+
+// No direct access
+defined('_HZEXEC_') or die();
+
+/**
+ * Migration script for adding indices and setting default field value
+ **/
+class Migration20131108091700ComBlog extends Base
+{
+	/**
+	 * Up
+	 **/
+	public function up()
+	{
+		if ($this->db->tableExists('#__blog_entries'))
+		{
+			$query = "ALTER TABLE `#__blog_entries`
+					CHANGE `id` `id` INT(11)  UNSIGNED  NOT NULL  AUTO_INCREMENT,
+					CHANGE `created_by` `created_by` INT(11)  UNSIGNED  NOT NULL  DEFAULT '0',
+					CHANGE `state` `state` TINYINT(2)  NOT NULL  DEFAULT '0',
+					CHANGE `publish_up` `publish_up` DATETIME  NOT NULL  DEFAULT '0000-00-00 00:00:00',
+					CHANGE `publish_down` `publish_down` DATETIME  NOT NULL  DEFAULT '0000-00-00 00:00:00',
+					CHANGE `allow_comments` `allow_comments` TINYINT(2)  NOT NULL  DEFAULT '0',
+					CHANGE `hits` `hits` INT(11)  UNSIGNED  NOT NULL  DEFAULT '0',
+					CHANGE `params` `params` TINYTEXT  NOT NULL,
+					CHANGE `scope` `scope` VARCHAR(100)  NOT NULL  DEFAULT '',
+					CHANGE `content` `content` TEXT  NOT NULL,
+					CHANGE `alias` `alias` VARCHAR(255)  NOT NULL  DEFAULT '',
+					CHANGE `title` `title` VARCHAR(255)  NOT NULL  DEFAULT ''
+			;";
+			$this->db->setQuery($query);
+			$this->db->query();
+
+			if ($this->db->tableHasField('#__blog_entries', 'group_id'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` CHANGE `group_id` `group_id` INT(11)  NOT NULL  DEFAULT '0';";
+				$this->db->setQuery($query);
+				$this->db->query();
+
+				if (!$this->db->tableHasKey('#__blog_entries', 'idx_group_id'))
+				{
+					$query = "ALTER TABLE `#__blog_entries` ADD INDEX `idx_group_id` (`group_id`);";
+					$this->db->setQuery($query);
+					$this->db->query();
+				}
+			}
+
+			if (!$this->db->tableHasKey('#__blog_entries', 'idx_created_by'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` ADD INDEX `idx_created_by` (`created_by`);";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+
+			if (!$this->db->tableHasKey('#__blog_entries', 'idx_alias'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` ADD INDEX `idx_alias` (`alias`);";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+		}
+
+		if ($this->db->tableExists('#__blog_comments'))
+		{
+			$query = "ALTER TABLE `#__blog_comments`
+					CHANGE `id` `id` INT(11)  UNSIGNED  NOT NULL  AUTO_INCREMENT,
+					CHANGE `parent` `parent` INT(11)  UNSIGNED  NOT NULL  DEFAULT '0',
+					CHANGE `created_by` `created_by` INT(11)  UNSIGNED  NOT NULL  DEFAULT '0',
+					CHANGE `created` `created` DATETIME  NOT NULL  DEFAULT '0000-00-00 00:00:00',
+					CHANGE `entry_id` `entry_id` INT(11)  UNSIGNED  NOT NULL  DEFAULT '0',
+					CHANGE `content` `content` TEXT  NOT NULL
+			;";
+			$this->db->setQuery($query);
+			$this->db->query();
+
+			if (!$this->db->tableHasKey('#__blog_comments', 'idx_created_by'))
+			{
+				$query = "ALTER TABLE `#__blog_comments` ADD INDEX `idx_created_by` (`created_by`);";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+
+			if (!$this->db->tableHasKey('#__blog_comments', 'idx_parent'))
+			{
+				$query = "ALTER TABLE `#__blog_comments` ADD INDEX `idx_parent` (`parent`);";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+		}
+	}
+
+	/**
+	 * Down
+	 **/
+	public function down()
+	{
+		if ($this->db->tableExists('#__blog_entries'))
+		{
+			if ($this->db->tableHasKey('#__blog_entries', 'idx_created_by'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` DROP INDEX `idx_created_by`;";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+
+			if ($this->db->tableHasKey('#__blog_entries', 'idx_group_id'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` DROP INDEX `idx_group_id`;";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+
+			if ($this->db->tableHasKey('#__blog_entries', 'idx_alias'))
+			{
+				$query = "ALTER TABLE `#__blog_entries` DROP INDEX `idx_alias`;";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+		}
+
+		if ($this->db->tableExists('#__blog_comments'))
+		{
+			if ($this->db->tableHasKey('#__blog_comments', 'idx_created_by'))
+			{
+				$query = "ALTER TABLE `#__blog_comments` DROP INDEX `idx_created_by`;";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+
+			if ($this->db->tableHasKey('#__blog_comments', 'idx_parent'))
+			{
+				$query = "ALTER TABLE `#__blog_comments` DROP INDEX `idx_parent`;";
+				$this->db->setQuery($query);
+				$this->db->query();
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+The logic for the \texttt{up()} method is reversed by the \texttt{down()} method. Furthermore, the heading of the file contains a description of what the migration's purpose is, which is \textbf{required}.
+The filename of the migration \textbf{must} match the class name. Therefore the migration in Listing \ref{migrationexample} has a file name of \texttt{Migration20131108091700ComBlog.php} and the class name is \texttt{Migration20131108091700ComBlog}.
+
+Once the migration has been formed, it can be ran using the incantation as shown in Listing \ref{migrationrun}.
+\begin{lstlisting}[caption={Running migrations to keep the database tables synchronized with upstream changes.},language=Bash,label=migrationrun]
+./muse migration -i -f
+\end{lstlisting}
+
+The \texttt{muse} command as shown in Listing \ref{migrationrun} will run all migrations ignoring date \texttt{-i}, and forcibly \texttt{-f}. You can run muse in 'dry-run' mode by omitting the \texttt{-f} flag, which 
+is useful for debugging.
+
+%\subsection{Syntax Check}
+%\begin{lstlisting}[caption={Muse can inititate the same check as the Linter to prevent rejected commits.},language=Bash]
+%./muse repository syntax
+%\end{lstlisting}
+
+\section{Module 2 - Behaviorial Testing of \texttt{com\_feedback} Using Codeception}
+
+\subsection{Pre-reading}
+These are some readings to help set the stage for this module. They might contain some information which is relevant in the following module.
+
+\begin{itemize}
+\item \url{http://code.tutsplus.com/articles/maintainable-automated-ui-tests--net-35089}
+\item \url{https://code.google.com/p/selenium/wiki/PageObjects}
+\item \url{http://codeception.com/docs/01-Introduction}
+\item \url{http://codeception.com/quickstart}
+\item \url{http://codeception.com/docs/modules/WebDriver}
+\item \url{http://codeception.com/docs/modules/PhpBrowser}
+\item \url{https://en.wikipedia.org/wiki/Behavior-driven_development}
+\end{itemize}
+
+\subsection{Deliverables}
+Your progress will be evaluated based on the following deliverables: 
+\begin{enumerate}
+\item What does \texttt{com\_feedback} do - in a general sense?
+\item What method first loads when you go to \url{<your-hub-url.org>/feedback}?
+\item Are you required to login to submit a feedback story?
+\item Demonstrate a test to check whether login is necessary to submit a feedback story?
+\end{enumerate}
+
+\subsection{What is a component?}
+Think of a \texttt{component} in HUBzero as an application. It is a collection of PHP, HTML, CSS, Javascript which adds a new set of end-to-end functionality within the CMS. 
+A component has a particular structure which facilitates MVC development. There is a new \texttt{Relational} class which provides Object Relationships. Components may contain code which is easily
+tested using a Unit-test, but often times it proves difficult as the information displayed on through the view is a function of data stored in the MySQL database. For more information about developing a component visit \url{https://hubzero.org/documentation/2.0/webdevs/components}.
+
+\subsection{Model, View, Controller}
+As I have stated before, a \texttt{component} is an applciation which is developed under the Model, View, Controller (MVC) paradigm. This allows seperation of logic, data store functions, and presentation / design. 
+
+\subsubsection{Model}
+A \texttt{model} is a class which is responsible for interacting with the datastore. Usually from the \texttt{controller} it will be necessary to access data contained in a store (MySQL database), perform some action, and push the data to the \texttt{view}. As of HUBzero 2.0.0, the standard for using the \texttt{Relational} class has been defined. There is an on-going effort to convert older models, based on Joomla's \texttt{JTable} to the \texttt{Relational} class. It is recommended to run \texttt{get\_class\_methods()} on an instance of the \texttt{Relational} class. Please refer to \path{core/libraries/Hubzero/Database/Relational.php} for more information.
+
+\subsection{Codeception Setup}
+Codeception is a testing framework which is capable of Unit testing, Acceptance testing, and Behavioral testing. It is our hope to use Codeception within the CMS to provide front-end testing via behavioral driven testing.
+
+\subsubsection{Installing Codeception}
+Codeception is installable via a \texttt{Composer} package. Within \path{/core}, there is a file called \texttt{composer.json}. This is a list of all PHP packages which are loaded during runtime.
+For further guidance: \url{http://codeception.com/install}.
+Install Codeception by:
+
+\subsection{Notes Concerning Writing Tests with Codeception}
+Here are some snippets to get started with writing tests with Codeception:
+
+\begin{itemize}
+\item \url{http://stackoverflow.com/questions/27296495/codeception-what-is-the-difference-between-cest-and-cept}
+\item \url{http://codeception.com/docs/04-FunctionalTests} - we want to do functional tests for \texttt{com\_feedback}
+\end{itemize}
+
+\section{Module 3 - Automation of Testing}
+
+\end{document}
